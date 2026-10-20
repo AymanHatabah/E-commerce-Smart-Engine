@@ -102,25 +102,27 @@ def fetch_model(df):
 df = fetch_data()
 vectorizer, tfidf_matrix = fetch_model(df)
 
+
 # --- 3. Function to draw the product card ---
 def render_product_card(row):
     # Make description short if it is too long
     desc = str(row['about_product'])[:150] + "..." if len(str(row['about_product'])) > 150 else str(row['about_product'])
-    
+    product_url = row.get('product_link', '#')
     html = f"""
-    <div class="product-card">
-        <div class="product-title">{row['product_name']}</div>
-        <div class="price-container">
-            <span class="discount-price">{row['discounted_price']}</span>
-            <span class="actual-price">{row['actual_price']}</span>
-            <span class="badge badge-discount">Save {row['discount_percentage']}</span>
-            <span class="badge badge-rating">⭐ {row['rating']}</span>
+    <a href="{product_url}" target="_blank" style="text-decoration: none;">
+        <div class="product-card">
+            <div class="product-title">{row['product_name']}</div>
+            <div class="price-container">
+                <span class="discount-price">{row['discounted_price']}</span>
+                <span class="actual-price">{row['actual_price']}</span>
+                <span class="badge badge-discount">Save {row['discount_percentage']}</span>
+                <span class="badge badge-rating">⭐ {row['rating']}</span>
+            </div>
+            <div class="product-desc">{desc}</div>
         </div>
-        <div class="product-desc">{desc}</div>
-    </div>
+    </a>
     """
     st.markdown(html, unsafe_allow_html=True)
-
 # --- 4. Main App UI ---
 st.title("🛒 AI E-Commerce Search & Recommend")
 
